@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { isE2E } from './e2e-check';
 
 @Injectable()
 export class ToastService {
-  constructor(public snackBar: MatSnackBar) {}
+  constructor(public snackBar: MatSnackBar) { }
 
   openSnackBar(message: string, action: string) {
-    setTimeout(
-      () => this.snackBar.open(message, action, { duration: 2000 }),
-      0
-    );
+    if (isE2E) {
+      console.log(`${message} - ${action}`);
+    } else {
+      this.snackBar.open(message, action, {
+        duration: 2000
+      });
+    }
   }
 }

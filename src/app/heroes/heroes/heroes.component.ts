@@ -38,8 +38,8 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
   }
 
   getHeroes() {
-    this.heroDispatchers.getHeroes();
     this.close();
+    this.heroDispatchers.getHeroes();
   }
 
   add(hero: Hero) {
@@ -47,6 +47,7 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
   }
 
   delete(hero: Hero) {
+    this.close();
     this.heroDispatchers.deleteHero(hero);
   }
 

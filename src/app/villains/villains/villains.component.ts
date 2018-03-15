@@ -39,8 +39,8 @@ export class VillainsComponent
   }
 
   getVillains() {
-    this.villainDispatchers.getVillains();
     this.close();
+    this.villainDispatchers.getVillains();
   }
 
   add(villain: Villain) {
@@ -48,6 +48,7 @@ export class VillainsComponent
   }
 
   delete(villain: Villain) {
+    this.close();
     this.villainDispatchers.deleteVillain(villain);
   }
 
