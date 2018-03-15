@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { MasterDetailCommands, Hero } from '../../core';
-import { HeroService } from '../hero.service';
+import { HeroSelectors, HeroDispatchers } from '../../store';
 
 @Component({
   selector: 'app-heroes',
@@ -17,9 +17,12 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
   heroes$: Observable<Hero[]>;
   loading$: Observable<boolean>;
 
-  constructor(private heroService: HeroService) {
-    this.heroes$ = heroService.entities$;
-    this.loading$ = heroService.loading$;
+  constructor(
+    private heroDispatchers: HeroDispatchers,
+    private heroSelectors: HeroSelectors
+  ) {
+    this.heroes$ = this.heroSelectors.heroes$();
+    this.loading$ = this.heroSelectors.loading$();
   }
 
   ngOnInit() {
@@ -35,20 +38,20 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
   }
 
   getHeroes() {
-    this.heroService.getAll();
+    this.heroDispatchers.getHeroes();
     this.close();
   }
 
   add(hero: Hero) {
-    this.heroService.add(hero);
+    this.heroDispatchers.addHero(hero);
   }
 
   delete(hero: Hero) {
-    this.heroService.delete(hero.id);
+    this.heroDispatchers.deleteHero(hero);
   }
 
   update(hero: Hero) {
-    this.heroService.update(hero);
+    this.heroDispatchers.updateHero(hero);
   }
 
   select(hero: Hero) {

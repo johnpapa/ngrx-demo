@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { MasterDetailCommands, Villain } from '../../core';
-import { VillainService } from '../villain.service';
+import { VillainSelectors, VillainDispatchers } from '../../store';
 
 @Component({
   selector: 'app-villains',
@@ -18,9 +18,12 @@ export class VillainsComponent
   villains$: Observable<Villain[]>;
   loading$: Observable<boolean>;
 
-  constructor(private villainService: VillainService) {
-    this.villains$ = villainService.entities$;
-    this.loading$ = villainService.loading$;
+  constructor(
+    private villainDispatchers: VillainDispatchers,
+    private villainSelectors: VillainSelectors
+  ) {
+    this.villains$ = this.villainSelectors.villains$();
+    this.loading$ = this.villainSelectors.loading$();
   }
 
   ngOnInit() {
@@ -36,20 +39,20 @@ export class VillainsComponent
   }
 
   getVillains() {
-    this.villainService.getAll();
+    this.villainDispatchers.getVillains();
     this.close();
   }
 
   add(villain: Villain) {
-    this.villainService.add(villain);
+    this.villainDispatchers.addVillain(villain);
   }
 
   delete(villain: Villain) {
-    this.villainService.delete(villain.id);
+    this.villainDispatchers.deleteVillain(villain);
   }
 
   update(villain: Villain) {
-    this.villainService.update(villain);
+    this.villainDispatchers.updateVillain(villain);
   }
 
   select(villain: Villain) {

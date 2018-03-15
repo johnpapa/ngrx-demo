@@ -7,6 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core';
 import { AppStoreModule } from './store/app-store.module';
+import { MetaReducer, StoreModule } from '@ngrx/store';
+import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+export const metaReducers: MetaReducer<any>[] = environment.production
+  ? []
+  : []; // [storeFreeze];
 
 @NgModule({
   imports: [
@@ -15,7 +23,10 @@ import { AppStoreModule } from './store/app-store.module';
     CoreModule,
     HttpClientModule,
     AppRoutingModule,
-    AppStoreModule
+    AppStoreModule,
+    StoreModule.forRoot({}, { metaReducers }),
+    EffectsModule.forRoot([]),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]

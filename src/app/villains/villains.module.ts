@@ -6,8 +6,6 @@ import { VillainDetailComponent } from './villain-detail/villain-detail.componen
 import { VillainsComponent } from './villains/villains.component';
 import { VillainListComponent } from './villain-list/villain-list.component';
 
-import { VillainService } from './villain.service';
-
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 
@@ -19,6 +17,6 @@ import { MaterialModule } from '../material/material.module';
     VillainDetailComponent,
     VillainListComponent
   ],
-  providers: [VillainService]
+  providers: []
 })
 export class VillainsModule {}
