@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pre-commit": "pretty-quick --staged",
+    "pre-commit": "pretty-quick"
   },
   "pre-commit": ["pre-commit"],
   "private": true,
