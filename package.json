@@ -9,9 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pre-commit": "pretty-quick"
+    "precommit": "pretty-quick"
   },
-  "pre-commit": ["pre-commit"],
+  "precommit": ["pre-commit"],
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.0",
