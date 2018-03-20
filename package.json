@@ -9,13 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pre-commit": "lint-staged",
-    "pretty": "pretty-quick"
+    "pre-commit": "pretty-quick --staged",
   },
   "pre-commit": ["pre-commit"],
-  "lint-staged": {
-    "*.{ts,js,json,css,md,html}": ["pretty-quick", "git add"]
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.0",
