@@ -11,7 +11,7 @@
     "e2e": "ng e2e",
     "precommit": "pretty-quick --staged"
   },
-  "precommit": ["pre-commit"],
+  "precommit": ["precommit"],
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.0",
