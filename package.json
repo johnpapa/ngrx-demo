@@ -9,9 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "pretty-quick": "pretty-quick",
     "precommit": "pretty-quick --staged"
   },
-  "precommit": ["precommit"],
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.0",
@@ -51,7 +51,6 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "lint-staged": "^7.0.0",
     "prettier": "^1.11.1",
     "pretty-quick": "^1.4.1",
     "protractor": "~5.1.2",
