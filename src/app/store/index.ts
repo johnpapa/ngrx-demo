@@ -4,7 +4,7 @@ export * from './reducers';
 export * from './services';
 
 import {
-  HeroDispatchers,
+  HeroDispatchers, HeroHttpDispatchers,
   HeroDataService,
   HeroSelectors,
   VillainDispatchers,
@@ -14,7 +14,7 @@ import {
 
 export const services = [
   HeroDataService,
-  HeroDispatchers,
+  HeroDispatchers, HeroHttpDispatchers,
   HeroSelectors,
   VillainDispatchers,
   VillainDataService,

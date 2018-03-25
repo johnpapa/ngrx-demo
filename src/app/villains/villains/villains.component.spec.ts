@@ -1,5 +1,5 @@
 /*
- * Test the component by mocking its injected ngrx-data HeroesService
+ * Test the component by mocking its injected ngrx-data Service
  *
  * You have a choice of testing the component class alone or the component-and-its-template.
  * The latter requires importing more stuff and a bit more setup.
@@ -15,11 +15,13 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { of } from 'rxjs/observable/of';
 import { first, skip } from 'rxjs/operators';
 
 import { Villain } from '../../core';
 import { VillainsComponent } from './villains.component';
-import { VillainService } from '../villain.service';
+import { VillainDispatchers } from '../../store/services';
+import { VillainSelectors } from '../../store/services';
 
 // Used only to test class/template interaction
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -30,7 +32,7 @@ import { VillainDetailComponent } from '../villain-detail/villain-detail.compone
 
 // endregion imports
 
-describe('VillainsComponent (mock VillainService)', () => {
+describe('VillainsComponent (mock VillainDispatchers)', () => {
   describe('class-only', () => {
     it('can create component', () => {
       const { component } = villainsComponentSetupAsService();
@@ -50,34 +52,34 @@ describe('VillainsComponent (mock VillainService)', () => {
       component.ngOnInit();
     });
 
-    it('should call service.add(villain) when add(villain) called', () => {
+    it('should call dispatchers.addVillain(villain) when add(villain) called', () => {
       const {
         component,
-        testVillainService
+        testVillainDispatchers
       } = villainsComponentSetupAsService();
       const villain = { id: undefined, name: 'test', saying: 'test saying' };
       component.add(villain);
-      expect(testVillainService.add).toHaveBeenCalledWith(villain);
+      expect(testVillainDispatchers.addVillain).toHaveBeenCalledWith(villain);
     });
 
-    it('should call service.delete(id) when delete(villain) called', () => {
+    it('should call dispatchers.deleteVillain(villain) when delete(villain) called', () => {
       const {
         component,
-        testVillainService
+        testVillainDispatchers
       } = villainsComponentSetupAsService();
       const villain = { id: 42, name: 'test', saying: 'test saying' };
       component.delete(villain);
-      expect(testVillainService.delete).toHaveBeenCalledWith(42);
+      expect(testVillainDispatchers.deleteVillain).toHaveBeenCalledWith(villain);
     });
 
-    it('should call service.update(villain) when update(villain) called', () => {
+    it('should call dispatchers.updateVillain(villain) when update(villain) called', () => {
       const {
         component,
-        testVillainService
+        testVillainDispatchers
       } = villainsComponentSetupAsService();
       const villain = { id: 42, name: 'test', saying: 'test saying' };
       component.update(villain);
-      expect(testVillainService.update).toHaveBeenCalledWith(villain);
+      expect(testVillainDispatchers.updateVillain).toHaveBeenCalledWith(villain);
     });
 
     it('should set selected to an object when enableAddMode() called', () => {
@@ -130,17 +132,17 @@ describe('VillainsComponent (mock VillainService)', () => {
       );
 
       it(
-        'should call service.delete(villain) after listComponent.delete(villain)',
+        'should call dispatchers.deleteVillain(villain) after listComponent.delete(villain)',
         fakeAsync(() => {
           const {
             fixture,
             listComponent,
             initialVillains,
-            testVillainService,
+            testVillainDispatchers,
             testVillainsSubject
           } = villainListComponentSetup();
           const testVillain = listComponent.villains[0];
-          testVillainService.delete.and.callFake(() => {
+          testVillainDispatchers.deleteVillain.and.callFake(() => {
             testVillainsSubject.next(
               initialVillains.filter(v => v.id !== testVillain.id)
             );
@@ -148,9 +150,7 @@ describe('VillainsComponent (mock VillainService)', () => {
           listComponent.deleteVillain(testVillain);
           tick();
           fixture.detectChanges();
-          expect(testVillainService.delete).toHaveBeenCalledWith(
-            testVillain.id
-          );
+          expect(testVillainDispatchers.deleteVillain).toHaveBeenCalledWith(testVillain);
           expect(listComponent.villains.length).toBe(
             initialVillains.length - 1,
             'removed deleted'
@@ -209,7 +209,7 @@ describe('VillainsComponent (mock VillainService)', () => {
           const {
             detailEl,
             fixture,
-            testVillainService
+            testVillainDispatchers
           } = openDetailForSelected();
 
           const detailComponent: VillainDetailComponent =
@@ -230,12 +230,12 @@ describe('VillainsComponent (mock VillainService)', () => {
           fixture.detectChanges();
 
           // Changed value does not propagate to list because spy does nothing in this test
-          expect(testVillainService.update).toHaveBeenCalled();
+          expect(testVillainDispatchers.updateVillain).toHaveBeenCalled();
         })
       );
 
       function openDetailForSelected() {
-        const { fixture, testVillainService } = villainListComponentSetup();
+        const { fixture, testVillainDispatchers } = villainListComponentSetup();
         const villainEl = fixture.debugElement.query(
           By.css('.selectable-item')
         );
@@ -245,7 +245,7 @@ describe('VillainsComponent (mock VillainService)', () => {
         const detailEl = fixture.debugElement.query(
           By.directive(VillainDetailComponent)
         );
-        return { detailEl, fixture, testVillainService };
+        return { detailEl, fixture, testVillainDispatchers };
       }
     });
 
@@ -276,7 +276,7 @@ describe('VillainsComponent (mock VillainService)', () => {
       it(
         'should save new entity by clicking save',
         fakeAsync(() => {
-          const { detailEl, fixture, testVillainService } = openDetailForNew();
+          const { detailEl, fixture, testVillainDispatchers } = openDetailForNew();
 
           const detailComponent: VillainDetailComponent =
             detailEl.componentInstance;
@@ -296,12 +296,12 @@ describe('VillainsComponent (mock VillainService)', () => {
           fixture.detectChanges();
 
           // Changed value does not propagate to list because spy does nothing in this test
-          expect(testVillainService.add).toHaveBeenCalled();
+          expect(testVillainDispatchers.addVillain).toHaveBeenCalled();
         })
       );
 
       function openDetailForNew() {
-        const { fixture, testVillainService } = villainListComponentSetup();
+        const { fixture, testVillainDispatchers } = villainListComponentSetup();
         // We "know" it's the 2nd control panel button (brittle test)
         const addButton = fixture.debugElement.queryAll(
           By.css('.control-panel button')
@@ -312,7 +312,7 @@ describe('VillainsComponent (mock VillainService)', () => {
         const detailEl = fixture.debugElement.query(
           By.directive(VillainDetailComponent)
         );
-        return { detailEl, fixture, testVillainService };
+        return { detailEl, fixture, testVillainDispatchers };
       }
     });
   });
@@ -331,29 +331,32 @@ function villainsComponentCoreSetup() {
     { id: 2, name: 'C', saying: 'C says' }
   ];
   const testVillainsSubject = new BehaviorSubject<Villain[]>([]);
-  const testVillainService = jasmine.createSpyObj('VillainService', [
-    'getAll',
-    'add',
-    'delete',
-    'update'
+  const testVillainDispatchers = jasmine.createSpyObj('VillainDispatchers', [
+    'getVillains',
+    'addVillain',
+    'deleteVillain',
+    'updateVillain'
   ]);
 
-  testVillainService.getAll.and.callFake(() => {
+  testVillainDispatchers.getVillains.and.callFake(() => {
     // One tick, then deliver
     setTimeout(() => testVillainsSubject.next(initialVillains));
   });
 
-  testVillainService.entities$ = testVillainsSubject.asObservable();
+  const testVillainSelectors = {
+    villains$: testVillainsSubject.asObservable(),
+    loading$: of(false)
+  };
 
   TestBed.configureTestingModule({
     providers: [
       VillainsComponent, // When testing class-only
-      VillainService,
-      { provide: VillainService, useValue: testVillainService }
+      { provide: VillainDispatchers, useValue: testVillainDispatchers },
+      { provide: VillainSelectors, useValue: testVillainSelectors }
     ]
   });
 
-  return { initialVillains, testVillainService, testVillainsSubject };
+  return { initialVillains, testVillainDispatchers, testVillainSelectors, testVillainsSubject };
 }
 
 function villainsComponentSetupAsService() {

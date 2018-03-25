@@ -2,7 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { MasterDetailCommands, Hero } from '../../core';
-import { HeroSelectors, HeroDispatchers } from '../../store';
+import {
+  HeroSelectors,
+  // HeroDispatchers,                     // <-- relies on effects
+  HeroHttpDispatchers as HeroDispatchers  // <-- bypass effects
+} from '../../store';
 
 @Component({
   selector: 'app-heroes',
@@ -21,8 +25,8 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
     private heroDispatchers: HeroDispatchers,
     private heroSelectors: HeroSelectors
   ) {
-    this.heroes$ = this.heroSelectors.heroes$();
-    this.loading$ = this.heroSelectors.loading$();
+    this.heroes$ = this.heroSelectors.heroes$;
+    this.loading$ = this.heroSelectors.loading$;
   }
 
   ngOnInit() {

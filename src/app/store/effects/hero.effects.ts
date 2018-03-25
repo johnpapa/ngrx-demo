@@ -21,7 +21,7 @@ import { HeroDataService, DataServiceError } from '../services';
 import { HeroicState } from '../reducers';
 
 const filterAction = new HeroActions.GetHeroes();
-const toAction = HeroActions.toAction(); // TODO: do we need it?
+const toAction = HeroActions.toAction();
 type HeroAction = HeroActions.HeroAction;
 
 @Injectable()
