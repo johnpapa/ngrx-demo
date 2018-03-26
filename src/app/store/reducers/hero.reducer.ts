@@ -103,6 +103,13 @@ export function reducer(
         })
       };
     }
+
+    case HeroActions.SET_HERO_LOADING: {
+      return {
+        ...state,
+        loading: action.payload == null ? true : action.payload};
+    }
+
   }
   return state;
 }

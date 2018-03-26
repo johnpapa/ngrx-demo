@@ -24,6 +24,8 @@ export const DELETE_HERO = '[Hero] DELETE_HERO';
 export const DELETE_HERO_SUCCESS = '[Hero] DELETE_HERO_SUCCESS';
 export const DELETE_HERO_ERROR = '[Hero] DELETE_HERO_ERROR';
 
+export const SET_HERO_LOADING = '[Hero] SET_HERO_LOADING';
+
 export abstract class HeroAction implements DataAction<Hero> {
   readonly type: string;
   constructor(public readonly payload: Hero) {}
@@ -97,6 +99,11 @@ export class DeleteHeroError extends HeroErrorAction {
   readonly type = DELETE_HERO_ERROR;
 }
 
+export class SetHeroLoading {
+  readonly type = SET_HERO_LOADING;
+  constructor(public payload = true) {}
+}
+
 export type AllHeroActions =
   | GetHero
   | GetHeroSuccess
@@ -112,4 +119,5 @@ export type AllHeroActions =
   | AddHeroError
   | DeleteHero
   | DeleteHeroSuccess
-  | DeleteHeroError;
+  | DeleteHeroError
+  | SetHeroLoading;

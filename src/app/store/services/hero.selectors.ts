@@ -8,14 +8,17 @@ import { HeroicState } from '../reducers';
 
 // selectors
 const getHeroicState = createFeatureSelector<HeroicState>('heroic');
+
 const getHeroState = createSelector(
   getHeroicState,
   (state: HeroicState) => state.heroes
 );
+
 const getAllHeroes = createSelector(
   getHeroicState,
   (state: HeroicState) => state.heroes.heroes
 );
+
 const getHeroesLoading = createSelector(
   getHeroicState,
   (state: HeroicState) => state.heroes.loading
@@ -24,20 +27,8 @@ const getHeroesLoading = createSelector(
 @Injectable()
 export class HeroSelectors {
   constructor(private store: Store<HeroicState>) {}
-
-  heroes$() {
-    return this.store.select(getAllHeroes);
-  }
-
-  heroState$() {
-    return this.store
-      .select(getHeroState)
-      .pipe(tap(heroState => console.log('heroState', heroState)));
-  }
-
-  loading$() {
-    return this.store
-      .select(getHeroesLoading)
-      .pipe(tap(loading => console.log('loading', loading)));
-  }
+  // selectors$
+  heroes$ = this.store.select(getAllHeroes);
+  heroState$ = this.store.select(getHeroState);
+  loading$ = this.store.select(getHeroesLoading);
 }
