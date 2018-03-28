@@ -15,9 +15,9 @@ import { Action, Store } from '@ngrx/store';
 import * as HeroActions from '../actions';
 
 import { DataServiceError } from './data.service';
+import { EntityState } from '../reducers';
 import { Hero } from '../../core';
 import { HeroDataService } from './hero-data.service';
-import { HeroicState } from '../reducers';
 
 const filterAction = new HeroActions.GetHeroes();
 type HeroAction = HeroActions.HeroAction;
@@ -68,7 +68,7 @@ export class HeroHttpDispatchers {
   }
 
   constructor(
-    private store: Store<HeroicState>,
+    private store: Store<EntityState>,
     private heroDataService: HeroDataService
   ) {}
 

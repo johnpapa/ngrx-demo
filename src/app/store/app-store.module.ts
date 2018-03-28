@@ -15,7 +15,7 @@ import { environment } from '../../environments/environment';
   imports: [
     CommonModule,
     HttpClientModule,
-    StoreModule.forFeature('heroic', reducers),
+    StoreModule.forFeature('entityCache', reducers),
     EffectsModule.forFeature(effects)
   ],
   providers: [...services],

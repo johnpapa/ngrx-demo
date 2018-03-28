@@ -14,11 +14,11 @@ import {
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 
-import * as HeroActions from '../actions';
+import { EntityState } from '../reducers';
 
+import * as HeroActions from '../actions';
 import { Hero } from '../../core';
 import { HeroDataService, DataServiceError } from '../services';
-import { HeroicState } from '../reducers';
 
 const filterAction = new HeroActions.GetHeroes();
 const toAction = HeroActions.toAction();
@@ -79,7 +79,7 @@ export class HeroEffects {
     );
 
   constructor(
-    private store: Store<HeroicState>,
+    private store: Store<EntityState>,
     private actions$: Actions,
     private heroDataService: HeroDataService
   ) {}

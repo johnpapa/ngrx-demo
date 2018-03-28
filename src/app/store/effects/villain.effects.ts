@@ -14,11 +14,11 @@ import {
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 
-import * as VillainActions from '../actions';
+import { EntityState } from '../reducers';
 
+import * as VillainActions from '../actions';
 import { Villain } from '../../core';
 import { VillainDataService, DataServiceError } from '../services';
-import { HeroicState } from '../reducers';
 
 const filterAction = new VillainActions.GetVillains();
 const toAction = VillainActions.toAction();
@@ -79,7 +79,7 @@ export class VillainEffects {
     );
 
   constructor(
-    private store: Store<HeroicState>,
+    private store: Store<EntityState>,
     private actions$: Actions,
     private villainDataService: VillainDataService
   ) {}
