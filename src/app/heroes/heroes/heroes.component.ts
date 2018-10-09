@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
-import { MasterDetailCommands, Hero } from '../../core';
-import { HeroSelectors, HeroDispatchers } from '../../store';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Hero, MasterDetailCommands } from '../../core';
+import { HeroDispatchers, HeroSelectors } from '../../store';
 
 @Component({
   selector: 'app-heroes',

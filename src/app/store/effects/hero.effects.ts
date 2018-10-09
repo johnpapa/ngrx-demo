@@ -1,24 +1,11 @@
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import {
-  concatMap,
-  catchError,
-  first,
-  map,
-  mergeMap,
-  switchMap
-} from 'rxjs/operators';
-
-import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-
+import { Action, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { concatMap, switchMap } from 'rxjs/operators';
 import * as HeroActions from '../actions';
-
-import { Hero } from '../../core';
-import { HeroDataService, DataServiceError } from '../services';
 import { HeroicState } from '../reducers';
+import { HeroDataService } from '../services';
 
 const filterAction = new HeroActions.GetHeroes();
 const toAction = HeroActions.toAction(); // TODO: do we need it?

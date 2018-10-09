@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { MasterDetailCommands, Villain } from '../../core';
-import { VillainSelectors, VillainDispatchers } from '../../store';
+import { VillainDispatchers, VillainSelectors } from '../../store';
 
 @Component({
   selector: 'app-villains',

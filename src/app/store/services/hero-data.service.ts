@@ -1,21 +1,19 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Injectable } from '@angular/core';
+import { throwError, Observable } from 'rxjs';
 import { catchError, delay, map } from 'rxjs/operators';
-
-import { api, DataServiceError, fakeDelays } from './data.service';
-
 import { Hero } from '../../core';
+import { api, DataServiceError, fakeDelays } from './data.service';
 
 @Injectable()
 export class HeroDataService {
   constructor(private http: HttpClient) {}
 
   addHero(hero: Hero): Observable<Hero> {
-    return this.http
-      .post<Hero>(`${api}/hero/`, hero)
-      .pipe(delay(fakeDelays.save), catchError(this.handleError(hero)));
+    return this.http.post<Hero>(`${api}/hero/`, hero).pipe(
+      delay(fakeDelays.save),
+      catchError(this.handleError(hero))
+    );
   }
 
   deleteHero(hero: Hero): Observable<Hero> {
@@ -27,9 +25,10 @@ export class HeroDataService {
   }
 
   getHeroes(): Observable<Hero[]> {
-    return this.http
-      .get<Array<Hero>>(`${api}/heroes`)
-      .pipe(delay(fakeDelays.select), catchError(this.handleError()));
+    return this.http.get<Array<Hero>>(`${api}/heroes`).pipe(
+      delay(fakeDelays.select),
+      catchError(this.handleError())
+    );
   }
 
   updateHero(hero: Hero): Observable<Hero> {
@@ -44,7 +43,8 @@ export class HeroDataService {
     return (res: HttpErrorResponse) => {
       const error = new DataServiceError(res.error, requestData);
       console.error(error);
-      return new ErrorObservable(error);
+      // return new ErrorObservable(error);
+      return throwError(error);
     };
   }
 }

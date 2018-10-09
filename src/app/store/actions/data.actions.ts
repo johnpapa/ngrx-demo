@@ -1,10 +1,9 @@
 // General purpose entity action stuff, good for any entity type
 
-import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { DataServiceError } from '../services';
+import { Observable, of } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
+import { DataServiceError } from '../services';
 
 export abstract class DataAction<T> implements Action {
   readonly type: string;
