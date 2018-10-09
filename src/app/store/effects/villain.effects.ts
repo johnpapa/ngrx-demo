@@ -4,6 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { concatMap, switchMap } from 'rxjs/operators';
 import * as VillainActions from '../actions';
+import { EntityState } from '../reducers';
 import { VillainDataService } from '../services';
 
 const filterAction = new VillainActions.GetVillains();

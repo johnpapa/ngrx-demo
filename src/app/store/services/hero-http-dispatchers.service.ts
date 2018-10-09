@@ -1,16 +1,8 @@
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { concatMap, catchError, first, map, mergeMap } from 'rxjs/operators';
-
 import { Action, Store } from '@ngrx/store';
-
-import * as HeroActions from '../actions';
-
-import { DataServiceError } from './data.service';
-import { EntityState } from '../reducers';
 import { Hero } from '../../core';
+import * as HeroActions from '../actions';
+import { EntityState } from '../reducers';
 import { HeroDataService } from './hero-data.service';
 
 const filterAction = new HeroActions.GetHeroes();

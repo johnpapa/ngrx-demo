@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { concatMap, switchMap } from 'rxjs/operators';
 import * as HeroActions from '../actions';
 import { HeroDataService } from '../services';
+import { EntityState } from '../reducers';
 
 const filterAction = new HeroActions.GetHeroes();
 const toAction = HeroActions.toAction();
