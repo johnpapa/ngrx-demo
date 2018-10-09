@@ -11,12 +11,12 @@ import * as fromVillains from './villain.reducer';
 
 export type Action = fromActions.HeroAction;
 
-export interface HeroicState {
+export interface EntityState {
   heroes: fromHeroes.HeroState;
   villains: fromVillains.VillainState;
 }
 
-export const reducers: ActionReducerMap<HeroicState> = {
+export const reducers: ActionReducerMap<EntityState> = {
   heroes: fromHeroes.reducer,
   villains: fromVillains.reducer
   // here is where i put other reducers, when i have them

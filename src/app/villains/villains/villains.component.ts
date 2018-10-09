@@ -21,8 +21,8 @@ export class VillainsComponent
     private villainDispatchers: VillainDispatchers,
     private villainSelectors: VillainSelectors
   ) {
-    this.villains$ = this.villainSelectors.villains$();
-    this.loading$ = this.villainSelectors.loading$();
+    this.villains$ = this.villainSelectors.villains$;
+    this.loading$ = this.villainSelectors.loading$;
   }
 
   ngOnInit() {

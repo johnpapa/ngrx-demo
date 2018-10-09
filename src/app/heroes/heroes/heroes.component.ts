@@ -20,8 +20,8 @@ export class HeroesComponent implements MasterDetailCommands<Hero>, OnInit {
     private heroDispatchers: HeroDispatchers,
     private heroSelectors: HeroSelectors
   ) {
-    this.heroes$ = this.heroSelectors.heroes$();
-    this.loading$ = this.heroSelectors.loading$();
+    this.heroes$ = this.heroSelectors.heroes$;
+    this.loading$ = this.heroSelectors.loading$;
   }
 
   ngOnInit() {

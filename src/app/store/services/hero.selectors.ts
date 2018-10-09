@@ -2,42 +2,34 @@ import { Injectable } from '@angular/core';
 import { Store, createSelector, createFeatureSelector } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
 
+import { EntityState } from '../reducers';
 import { Hero } from '../../core';
 import * as HeroAction from '../actions';
-import { HeroicState } from '../reducers';
+import { HeroState } from '../reducers/hero.reducer';
 
 // selectors
-const getHeroicState = createFeatureSelector<HeroicState>('heroic');
+const getEntityState = createFeatureSelector<EntityState>('entityCache');
+
 const getHeroState = createSelector(
-  getHeroicState,
-  (state: HeroicState) => state.heroes
+  getEntityState,
+  (state: EntityState) => state.heroes
 );
+
 const getAllHeroes = createSelector(
-  getHeroicState,
-  (state: HeroicState) => state.heroes.heroes
+  getHeroState,
+  (state: HeroState) => state.heroes
 );
+
 const getHeroesLoading = createSelector(
-  getHeroicState,
-  (state: HeroicState) => state.heroes.loading
+  getHeroState,
+  (state: HeroState) => state.loading
 );
 
 @Injectable()
 export class HeroSelectors {
-  constructor(private store: Store<HeroicState>) {}
-
-  heroes$() {
-    return this.store.select(getAllHeroes);
-  }
-
-  heroState$() {
-    return this.store
-      .select(getHeroState)
-      .pipe(tap(heroState => console.log('heroState', heroState)));
-  }
-
-  loading$() {
-    return this.store
-      .select(getHeroesLoading)
-      .pipe(tap(loading => console.log('loading', loading)));
-  }
+  constructor(private store: Store<EntityState>) {}
+  // selectors$
+  heroes$ = this.store.select(getAllHeroes);
+  heroState$ = this.store.select(getHeroState);
+  loading$ = this.store.select(getHeroesLoading);
 }

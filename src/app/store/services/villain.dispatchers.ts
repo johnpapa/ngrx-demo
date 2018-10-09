@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { EntityState } from '../reducers';
 import { Villain } from '../../core';
 import * as VillainAction from '../actions';
-import { HeroicState } from '../reducers';
 
 @Injectable()
 export class VillainDispatchers {
-  constructor(private store: Store<HeroicState>) {}
+  constructor(private store: Store<EntityState>) {}
 
   deleteVillain(villain: Villain) {
     this.store.dispatch(new VillainAction.DeleteVillain(villain));

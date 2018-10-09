@@ -5,6 +5,7 @@ export * from './services';
 
 import {
   HeroDispatchers,
+  HeroHttpDispatchers,
   HeroDataService,
   HeroSelectors,
   VillainDispatchers,
@@ -15,6 +16,7 @@ import {
 export const services = [
   HeroDataService,
   HeroDispatchers,
+  HeroHttpDispatchers,
   HeroSelectors,
   VillainDispatchers,
   VillainDataService,

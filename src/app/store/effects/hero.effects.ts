@@ -4,11 +4,10 @@ import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { concatMap, switchMap } from 'rxjs/operators';
 import * as HeroActions from '../actions';
-import { HeroicState } from '../reducers';
 import { HeroDataService } from '../services';
 
 const filterAction = new HeroActions.GetHeroes();
-const toAction = HeroActions.toAction(); // TODO: do we need it?
+const toAction = HeroActions.toAction();
 type HeroAction = HeroActions.HeroAction;
 
 @Injectable()
@@ -66,7 +65,7 @@ export class HeroEffects {
     );
 
   constructor(
-    private store: Store<HeroicState>,
+    private store: Store<EntityState>,
     private actions$: Actions,
     private heroDataService: HeroDataService
   ) {}
