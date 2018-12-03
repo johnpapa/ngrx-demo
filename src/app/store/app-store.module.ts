@@ -19,7 +19,6 @@ import { environment } from '../../environments/environment';
     EffectsModule.forFeature(effects)
   ],
   providers: [...services],
-  declarations: [],
   exports: [StoreModule, EffectsModule]
 })
 export class AppStoreModule {}
