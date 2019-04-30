@@ -1,15 +1,40 @@
 <div class="control-panel">
   <div class="button-panel">
-    <button mat-raised-button color="primary" type="button" (click)="getHeroes()" matTooltip="Refresh the heroes">Refresh</button>
-    <button mat-raised-button color="primary" type="button" (click)="enableAddMode()" *ngIf="!selected" matTooltip="Add a new hero">Add</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="getHeroes()"
+      matTooltip="Refresh the heroes"
+    >
+      Refresh
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="enableAddMode()"
+      *ngIf="!selected"
+      matTooltip="Add a new hero"
+    >
+      Add
+    </button>
   </div>
 </div>
 <div class="content-container">
   <div class="list-container">
     <div *ngIf="heroes$ | async as heroes">
-      <mat-spinner *ngIf="loading$ | async;else heroList" mode="indeterminate" color="accent"></mat-spinner>
+      <mat-spinner
+        *ngIf="loading$ | async; else heroList"
+        mode="indeterminate"
+        color="accent"
+      ></mat-spinner>
       <ng-template #heroList>
-        <app-hero-list [heroes]="heroes" [selectedHero]="selected" [commands]="commands"></app-hero-list>
+        <app-hero-list
+          [heroes]="heroes"
+          [selectedHero]="selected"
+          [commands]="commands"
+        ></app-hero-list>
       </ng-template>
     </div>
   </div>
