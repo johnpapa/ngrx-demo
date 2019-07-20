@@ -1,123 +1,54 @@
-import { Action } from '@ngrx/store';
-
+import { createAction, props } from '@ngrx/store';
 import { Hero } from '../../core';
 import { DataServiceError } from '../config';
-import { DataAction, DataErrorAction } from './data.actions';
 
-export const ADD_HERO = '[Hero] ADD_HERO';
-export const ADD_HERO_ERROR = '[Hero] ADD_HERO_ERROR';
-export const ADD_HERO_SUCCESS = '[Hero] ADD_HERO_SUCCESS';
+export const createHeroAction = (actionType: string) =>
+  createAction(actionType, props<{ hero: Hero }>());
 
-export const GET_HERO = '[Hero] GET_HERO';
-export const GET_HERO_SUCCESS = '[Hero] GET_HERO_SUCCESS';
-export const GET_HERO_ERROR = '[Hero] GET_HERO_ERROR';
+export const createHeroErrorAction = (actionType: string) =>
+  createAction(actionType, props<{ error: DataServiceError<Hero> }>());
 
-export const UPDATE_HERO = '[Hero] UPDATE_HERO';
-export const UPDATE_HERO_SUCCESS = '[Hero] UPDATE_HERO_SUCCESS';
-export const UPDATE_HERO_ERROR = '[Hero] UPDATE_HERO_ERROR';
+export const getHeroes = createAction('[Hero] GET_HEROES');
 
-export const GET_HEROES = '[Hero] GET_HEROES';
-export const GET_HEROES_SUCCESS = '[Hero] GET_HEROES_SUCCESS';
-export const GET_HEROES_ERROR = '[Hero] GET_HEROES_ERROR';
+export const getHeroesSuccess = createAction(
+  '[Hero] GET_HEROES_SUCCESS',
+  props<{ heroes: Hero[] }>()
+);
 
-export const DELETE_HERO = '[Hero] DELETE_HERO';
-export const DELETE_HERO_SUCCESS = '[Hero] DELETE_HERO_SUCCESS';
-export const DELETE_HERO_ERROR = '[Hero] DELETE_HERO_ERROR';
+export const getHeroesError = createAction(
+  '[Hero] GET_HEROES_ERROR',
+  props<{ error: any }>()
+);
 
-export const SET_HERO_LOADING = '[Hero] SET_HERO_LOADING';
+export const addHero = createHeroAction('[Hero] ADD_HERO');
 
-export abstract class HeroAction implements DataAction<Hero> {
-  readonly type: string;
-  constructor(public readonly payload: Hero) {}
-}
+export const addHeroSuccess = createHeroAction('[Hero] ADD_HERO_SUCCESS');
 
-export abstract class HeroErrorAction implements DataErrorAction<Hero> {
-  readonly type: string;
-  constructor(public readonly payload: DataServiceError<Hero>) {}
-}
+export const addHeroError = createHeroErrorAction('[Hero] ADD_HERO_ERROR');
 
-export class GetHeroes implements Action {
-  readonly type = GET_HEROES;
-}
+export const getHero = createAction('[Hero] GET_HERO', props<{ id: string }>());
 
-export class GetHeroesSuccess implements Action {
-  readonly type = GET_HEROES_SUCCESS;
-  constructor(public readonly payload: Hero[]) {}
-}
+export const getHeroSuccess = createHeroAction('[Hero] GET_HERO_SUCCESS');
 
-export class GetHeroesError implements Action {
-  readonly type = GET_HEROES_ERROR;
-  constructor(public readonly payload: any) {}
-}
+export const getHeroError = createHeroErrorAction('[Hero] GET_HERO_ERROR');
 
-export class AddHero extends HeroAction {
-  readonly type = ADD_HERO;
-}
+export const updateHero = createHeroAction('[Hero] UPDATE_HERO');
 
-export class AddHeroSuccess extends HeroAction {
-  readonly type = ADD_HERO_SUCCESS;
-}
+export const updateHeroSuccess = createHeroAction('[Hero] UPDATE_HERO_SUCCESS');
 
-export class AddHeroError extends HeroErrorAction {
-  readonly type = ADD_HERO_ERROR;
-}
+export const updateHeroError = createHeroErrorAction(
+  '[Hero] UPDATE_HERO_ERROR'
+);
 
-export class GetHero implements Action {
-  readonly type = GET_HERO;
-  constructor(public readonly payload: string) {}
-}
+export const deleteHero = createHeroAction('[Hero] DELETE_HERO');
 
-export class GetHeroSuccess extends HeroAction {
-  readonly type = GET_HERO_SUCCESS;
-}
+export const deleteHeroSuccess = createHeroAction('[Hero] DELETE_HERO_SUCCESS');
 
-export class GetHeroError extends HeroErrorAction {
-  readonly type = GET_HERO_ERROR;
-}
+export const deleteHeroError = createHeroErrorAction(
+  '[Hero] DELETE_HERO_ERROR'
+);
 
-export class UpdateHero extends HeroAction {
-  readonly type = UPDATE_HERO;
-}
-
-export class UpdateHeroSuccess extends HeroAction {
-  readonly type = UPDATE_HERO_SUCCESS;
-}
-
-export class UpdateHeroError extends HeroErrorAction {
-  readonly type = UPDATE_HERO_ERROR;
-}
-
-export class DeleteHero extends HeroAction {
-  readonly type = DELETE_HERO;
-}
-
-export class DeleteHeroSuccess extends HeroAction {
-  readonly type = DELETE_HERO_SUCCESS;
-}
-
-export class DeleteHeroError extends HeroErrorAction {
-  readonly type = DELETE_HERO_ERROR;
-}
-
-export class SetHeroLoading {
-  readonly type = SET_HERO_LOADING;
-  constructor(public payload = true) {}
-}
-
-export type AllHeroActions =
-  | GetHero
-  | GetHeroSuccess
-  | GetHeroError
-  | UpdateHero
-  | UpdateHeroSuccess
-  | UpdateHeroError
-  | GetHeroes
-  | GetHeroesSuccess
-  | GetHeroesError
-  | AddHero
-  | AddHeroSuccess
-  | AddHeroError
-  | DeleteHero
-  | DeleteHeroSuccess
-  | DeleteHeroError
-  | SetHeroLoading;
+export const setHeroLoading = createAction(
+  '[Hero] SET_HERO_LOADING',
+  props<{ loading: boolean }>()
+);

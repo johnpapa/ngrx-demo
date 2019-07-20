@@ -1,68 +1,62 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { concatMap, switchMap } from 'rxjs/operators';
 import * as VillainActions from '../actions';
-import { EntityState } from '../reducers';
 import { VillainDataService } from '../services';
 
-const filterAction = new VillainActions.GetVillains();
 const toAction = VillainActions.toAction();
-type VillainAction = VillainActions.VillainAction;
 
 @Injectable()
 export class VillainEffects {
   @Effect()
-  getVillains$: Observable<Action> = this.actions$.pipe(
-    ofType(VillainActions.GET_VILLAINS),
+  getVillains$ = this.actions$.pipe(
+    ofType(VillainActions.getVillains),
     switchMap(() =>
       toAction(
         this.villainDataService.getVillains(),
-        VillainActions.GetVillainsSuccess,
-        VillainActions.GetVillainsError
+        VillainActions.getVillainsSuccess,
+        VillainActions.getVillainsError
       )
     )
   );
 
   @Effect()
-  addVillain$: Observable<Action> = this.actions$.pipe(
-    ofType(VillainActions.ADD_VILLAIN),
-    concatMap((action: VillainAction) =>
+  addVillain$ = this.actions$.pipe(
+    ofType(VillainActions.addVillain),
+    concatMap(action =>
       toAction(
-        this.villainDataService.addVillain(action.payload),
-        VillainActions.AddVillainSuccess,
-        VillainActions.AddVillainError
+        this.villainDataService.addVillain(action.villain),
+        VillainActions.addVillainSuccess,
+        VillainActions.addVillainError
       )
     )
   );
 
   @Effect()
-  deleteVillain$: Observable<Action> = this.actions$.pipe(
-    ofType(VillainActions.DELETE_VILLAIN),
-    concatMap((action: VillainAction) =>
+  deleteVillain$ = this.actions$.pipe(
+    ofType(VillainActions.deleteVillain),
+    concatMap(action =>
       toAction(
-        this.villainDataService.deleteVillain(action.payload),
-        VillainActions.DeleteVillainSuccess,
-        VillainActions.DeleteVillainError
+        this.villainDataService.deleteVillain(action.villain),
+        VillainActions.deleteVillainSuccess,
+        VillainActions.deleteVillainError
       )
     )
   );
 
   @Effect()
-  updateVillain$: Observable<Action> = this.actions$.pipe(
-    ofType<VillainActions.UpdateVillain>(VillainActions.UPDATE_VILLAIN),
-    concatMap((action: VillainAction) =>
+  updateVillain$ = this.actions$.pipe(
+    ofType(VillainActions.updateVillain),
+    concatMap(action =>
       toAction(
-        this.villainDataService.updateVillain(action.payload),
-        VillainActions.UpdateVillainSuccess,
-        VillainActions.UpdateVillainError
+        this.villainDataService.updateVillain(action.villain),
+        VillainActions.updateVillainSuccess,
+        VillainActions.updateVillainError
       )
     )
   );
 
   constructor(
-    private store: Store<EntityState>,
     private actions$: Actions,
     private villainDataService: VillainDataService
   ) {}

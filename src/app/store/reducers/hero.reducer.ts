@@ -13,7 +13,11 @@ export const initialState: HeroState = {
   error: false
 };
 
-export function reducer(
+export function reducer(state: State | undefined, action: Action) {
+  return heroReducer(state, action);
+}
+
+export function oldReducer(
   state = initialState,
   action: HeroActions.AllHeroActions
 ): HeroState {
