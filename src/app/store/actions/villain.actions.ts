@@ -12,7 +12,7 @@ export const getVillains = createAction('[Villain] GET_VILLAINS');
 
 export const getVillainsSuccess = createAction(
   '[Villain] GET_VILLAINS_SUCCESS',
-  props<{ VILLAINS: Villain[] }>()
+  props<{ villains: Villain[] }>()
 );
 
 export const getVillainsError = createAction(
