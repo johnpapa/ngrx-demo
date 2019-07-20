@@ -1,3 +1,4 @@
+import { Action, createReducer, on } from '@ngrx/store';
 import { Hero } from '../../core';
 import * as HeroActions from '../actions';
 
@@ -12,111 +13,6 @@ export const initialState: HeroState = {
   loading: false,
   error: false
 };
-
-export function reducer(state: State | undefined, action: Action) {
-  return heroReducer(state, action);
-}
-
-export function oldReducer(
-  state = initialState,
-  action: HeroActions.AllHeroActions
-): HeroState {
-  switch (action.type) {
-    case HeroActions.ADD_HERO: {
-      return { ...state, loading: true };
-    }
-
-    case HeroActions.ADD_HERO_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        heroes: [...state.heroes, { ...action.payload }]
-      };
-    }
-
-    case HeroActions.ADD_HERO_ERROR: {
-      return { ...state, loading: false };
-    }
-
-    case HeroActions.GET_HEROES: {
-      return { ...state, loading: true };
-    }
-
-    case HeroActions.GET_HEROES_ERROR: {
-      return {
-        ...state,
-        loading: false
-      };
-    }
-
-    case HeroActions.GET_HEROES_SUCCESS: {
-      return {
-        ...state,
-        heroes: action.payload,
-        loading: false
-      };
-    }
-
-    case HeroActions.DELETE_HERO: {
-      return {
-        ...state,
-        loading: true,
-        heroes: state.heroes.filter(h => h !== action.payload)
-      };
-    }
-
-    case HeroActions.DELETE_HERO_SUCCESS: {
-      const result = { ...state, loading: false };
-      return result;
-    }
-
-    case HeroActions.DELETE_HERO_ERROR: {
-      return {
-        ...state,
-        heroes: [...state.heroes, action.payload.requestData],
-        loading: false
-      };
-    }
-
-    case HeroActions.UPDATE_HERO: {
-      return {
-        ...state,
-        heroes: state.heroes.map(h => {
-          if (h.id === action.payload.id) {
-            state.loading = true;
-          }
-          return h;
-        })
-      };
-    }
-
-    case HeroActions.UPDATE_HERO_SUCCESS: {
-      return modifyHeroState(state, action.payload);
-    }
-
-    case HeroActions.UPDATE_HERO_ERROR: {
-      return {
-        ...state,
-        loading: false,
-        heroes: state.heroes.map(h => {
-          if (h.id === action.payload.requestData.id) {
-            // Huh? No idea what the error is!
-            state.error = true;
-          }
-          return h;
-        })
-      };
-    }
-
-    case HeroActions.SET_HERO_LOADING: {
-      return {
-        ...state,
-        loading: action.payload == null ? true : action.payload
-      };
-    }
-  }
-  return state;
-}
 
 function modifyHeroState(
   heroState: HeroState,
@@ -133,4 +29,64 @@ function modifyHeroState(
       }
     })
   };
+}
+
+const heroReducer = createReducer(
+  initialState,
+  on(HeroActions.addHero, state => ({ ...state, loading: true })),
+  on(HeroActions.addHeroSuccess, (state, { hero }) => ({
+    ...state,
+    loading: false,
+    heroes: [...state.heroes, { ...hero }]
+  })),
+  on(HeroActions.addHeroError, state => ({ ...state, loading: false })),
+  on(HeroActions.getHeroes, state => ({ ...state, loading: true })),
+  on(HeroActions.getHeroesError, state => ({ ...state, loading: false })),
+  on(HeroActions.getHeroesSuccess, (state, { heroes }) => ({
+    ...state,
+    loading: false,
+    heroes
+  })),
+  on(HeroActions.deleteHero, (state, { hero }) => ({
+    ...state,
+    loading: false,
+    heroes: state.heroes.filter(h => h !== hero)
+  })),
+  on(HeroActions.deleteHeroSuccess, state => ({ ...state, loading: false })),
+  on(HeroActions.deleteHeroError, (state, { error }) => ({
+    ...state,
+    heroes: [...state.heroes, error.requestData],
+    loading: false
+  })),
+  on(HeroActions.updateHero, (state, { hero }) => ({
+    ...state,
+    heroes: state.heroes.map(h => {
+      if (h.id === hero.id) {
+        state.loading = true;
+      }
+      return h;
+    })
+  })),
+  on(HeroActions.updateHeroSuccess, (state, { hero }) =>
+    modifyHeroState(state, hero)
+  ),
+  on(HeroActions.updateHeroError, (state, { error }) => ({
+    ...state,
+    heroes: state.heroes.map(h => {
+      if (h.id === error.requestData.id) {
+        // Huh? No idea what the error is!
+        state.error = true;
+      }
+      return h;
+    }),
+    loading: false
+  })),
+  on(HeroActions.setHeroLoading, (state, { loading }) => ({
+    ...state,
+    loading: loading == null ? true : loading
+  }))
+);
+
+export function reducer(state: HeroState | undefined, action: Action) {
+  return heroReducer(state, action);
 }
