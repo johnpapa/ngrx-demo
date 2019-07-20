@@ -21,7 +21,7 @@ export class VillainDetailComponent implements OnChanges {
   @Input() villain: Villain;
   @Input() commands: MasterDetailCommands<Villain>;
 
-  @ViewChild('name') nameElement: ElementRef;
+  @ViewChild('name', { static: true }) nameElement: ElementRef;
 
   addMode = false;
   form = this.fb.group({
