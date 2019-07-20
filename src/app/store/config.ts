@@ -1,5 +1,5 @@
 // General purpose DataService stuff, good for any entity type
-import { isE2E } from '../../core';
+import { isE2E } from '../core';
 
 export const api = '/api';
 export const fakeDelays = isE2E ?

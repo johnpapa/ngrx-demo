@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
 import { catchError, delay, map } from 'rxjs/operators';
 import { Hero } from '../../core';
-import { api, DataServiceError, fakeDelays } from './data.service';
+import { api, DataServiceError, fakeDelays } from '../config';
 
 @Injectable()
 export class HeroDataService {
