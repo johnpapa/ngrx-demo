@@ -21,7 +21,7 @@ export class HeroDetailComponent implements OnChanges {
   @Input() hero: Hero;
   @Input() commands: MasterDetailCommands<Hero>;
 
-  @ViewChild('name') nameElement: ElementRef;
+  @ViewChild('name', { static: true }) nameElement: ElementRef;
 
   addMode = false;
   form = this.fb.group({

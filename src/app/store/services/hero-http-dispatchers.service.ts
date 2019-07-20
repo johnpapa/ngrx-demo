@@ -5,11 +5,6 @@ import * as HeroActions from '../actions';
 import { EntityState } from '../reducers';
 import { HeroDataService } from './hero-data.service';
 
-const filterAction = new HeroActions.GetHeroes();
-type HeroAction = HeroActions.HeroAction;
-
-const loadingTrueAction = new HeroActions.SetHeroLoading(true);
-
 /**
  * Make HTTP calls for Heroes
  * dispatch the results (success or error) to ngrx store.
@@ -61,5 +56,5 @@ export class HeroHttpDispatchers {
   ) {}
 
   private dispatch = (action: Action) => this.store.dispatch(action);
-  private dispatchLoading = () => this.dispatch(loadingTrueAction);
+  private dispatchLoading = () => this.dispatch(new HeroActions.SetHeroLoading(true));
 }

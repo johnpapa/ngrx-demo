@@ -3,7 +3,7 @@
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { DataServiceError } from '../services';
+import { DataServiceError } from '../config';
 
 export abstract class DataAction<T> implements Action {
   readonly type: string;

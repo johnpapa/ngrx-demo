@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, delay, map } from 'rxjs/operators';
 import { Villain } from '../../core';
-import { api, DataServiceError, fakeDelays } from './data.service';
+import { api, DataServiceError, fakeDelays } from '../config';
 
 @Injectable()
 export class VillainDataService {
