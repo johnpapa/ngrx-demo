@@ -1,15 +1,6 @@
-import {
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector
-} from '@ngrx/store';
-import { Store } from '@ngrx/store';
-
-import * as fromActions from '../actions';
+import { ActionReducerMap } from '@ngrx/store';
 import * as fromHeroes from './hero.reducer';
 import * as fromVillains from './villain.reducer';
-
-export type Action = fromActions.HeroAction;
 
 export interface EntityState {
   heroes: fromHeroes.HeroState;
