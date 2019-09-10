@@ -16,8 +16,8 @@ export class HeroHttpDispatchers {
     this.heroDataService
       .getHeroes()
       .subscribe(
-        heroes => this.dispatch(new HeroActions.GetHeroesSuccess(heroes)),
-        error => this.dispatch(new HeroActions.GetHeroesError(error))
+        heroes => this.dispatch(HeroActions.getHeroesSuccess({ heroes })),
+        error => this.dispatch(HeroActions.getHeroesError(error))
       );
   }
 
@@ -25,19 +25,21 @@ export class HeroHttpDispatchers {
     this.dispatchLoading();
     this.heroDataService.addHero(hero).subscribe(
       // pessimistic add: add hero to cache only when the server responds with success
-      addedHero => this.dispatch(new HeroActions.AddHeroSuccess(addedHero)),
-      error => this.dispatch(new HeroActions.AddHeroError(error))
+      addedHero =>
+        this.dispatch(HeroActions.addHeroSuccess({ hero: addedHero })),
+      error => this.dispatch(HeroActions.addHeroError(error))
     );
   }
 
   deleteHero(hero: Hero) {
     this.dispatchLoading();
     // optimistic delete: delete hero immediately from cache, before making request
-    this.dispatch(new HeroActions.DeleteHero(hero));
+    this.dispatch(HeroActions.deleteHero({ hero }));
     this.heroDataService.deleteHero(hero).subscribe(
-      addedHero => this.dispatch(new HeroActions.DeleteHeroSuccess(addedHero)),
+      addedHero =>
+        this.dispatch(HeroActions.deleteHeroSuccess({ hero: addedHero })),
       // no recovery: don't bother restoring the hero to cache when server responds with error
-      error => this.dispatch(new HeroActions.DeleteHeroError(error))
+      error => this.dispatch(HeroActions.deleteHeroError(error))
     );
   }
 
@@ -45,8 +47,9 @@ export class HeroHttpDispatchers {
     this.dispatchLoading();
     this.heroDataService.updateHero(hero).subscribe(
       // pessimistic update: update hero in cache only when the server responds with success
-      addedHero => this.dispatch(new HeroActions.UpdateHeroSuccess(addedHero)),
-      error => this.dispatch(new HeroActions.UpdateHeroError(error))
+      addedHero =>
+        this.dispatch(HeroActions.updateHeroSuccess({ hero: addedHero })),
+      error => this.dispatch(HeroActions.updateHeroError(error))
     );
   }
 
@@ -56,5 +59,6 @@ export class HeroHttpDispatchers {
   ) {}
 
   private dispatch = (action: Action) => this.store.dispatch(action);
-  private dispatchLoading = () => this.dispatch(new HeroActions.SetHeroLoading(true));
+  private dispatchLoading = () =>
+    this.dispatch(HeroActions.setHeroLoading({ loading: true }));
 }

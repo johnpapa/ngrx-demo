@@ -1,3 +1,4 @@
+import { Action, createReducer, on } from '@ngrx/store';
 import { Villain } from '../../core';
 import * as VillainActions from '../actions';
 
@@ -13,100 +14,6 @@ export const initialState: VillainState = {
   error: false
 };
 
-export function reducer(
-  state = initialState,
-  action: VillainActions.AllVillainActions
-): VillainState {
-  switch (action.type) {
-    case VillainActions.ADD_VILLAIN: {
-      return { ...state, loading: true };
-    }
-
-    case VillainActions.ADD_VILLAIN_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        villains: [...state.villains, { ...action.payload }]
-      };
-    }
-
-    case VillainActions.ADD_VILLAIN_ERROR: {
-      return { ...state, loading: false };
-    }
-
-    case VillainActions.GET_VILLAINS: {
-      return { ...state, loading: true };
-    }
-
-    case VillainActions.GET_VILLAINS_ERROR: {
-      return {
-        ...state,
-        loading: false
-      };
-    }
-
-    case VillainActions.GET_VILLAINS_SUCCESS: {
-      return {
-        ...state,
-        villains: action.payload,
-        loading: false
-      };
-    }
-
-    case VillainActions.DELETE_VILLAIN: {
-      return {
-        ...state,
-        loading: true,
-        villains: state.villains.filter(h => h !== action.payload)
-      };
-    }
-
-    case VillainActions.DELETE_VILLAIN_SUCCESS: {
-      const result = { ...state, loading: false };
-      return result;
-    }
-
-    case VillainActions.DELETE_VILLAIN_ERROR: {
-      return {
-        ...state,
-        villains: [...state.villains, action.payload.requestData],
-        loading: false
-      };
-    }
-
-    case VillainActions.UPDATE_VILLAIN: {
-      return {
-        ...state,
-        villains: state.villains.map(h => {
-          if (h.id === action.payload.id) {
-            state.loading = true;
-          }
-          return h;
-        })
-      };
-    }
-
-    case VillainActions.UPDATE_VILLAIN_SUCCESS: {
-      return modifyVillainState(state, action.payload);
-    }
-
-    case VillainActions.UPDATE_VILLAIN_ERROR: {
-      return {
-        ...state,
-        loading: false,
-        villains: state.villains.map(h => {
-          if (h.id === action.payload.requestData.id) {
-            // Huh? No idea what the error is!
-            state.error = true;
-          }
-          return h;
-        })
-      };
-    }
-  }
-  return state;
-}
-
 function modifyVillainState(
   villainState: VillainState,
   villainChanges: Partial<Villain>
@@ -114,12 +21,71 @@ function modifyVillainState(
   return {
     ...villainState,
     loading: false,
-    villains: villainState.villains.map(h => {
-      if (h.id === villainChanges.id) {
-        return { ...h, ...villainChanges };
+    villains: villainState.villains.map(v => {
+      if (v.id === villainChanges.id) {
+        return { ...v, ...villainChanges };
       } else {
-        return h;
+        return v;
       }
     })
   };
+}
+
+const villainReducer = createReducer(
+  initialState,
+  on(VillainActions.addVillain, state => ({ ...state, loading: true })),
+  on(VillainActions.addVillainSuccess, (state, { villain }) => ({
+    ...state,
+    loading: false,
+    villains: [...state.villains, { ...villain }]
+  })),
+  on(VillainActions.addVillainError, state => ({ ...state, loading: false })),
+  on(VillainActions.getVillains, state => ({ ...state, loading: true })),
+  on(VillainActions.getVillainsError, state => ({ ...state, loading: false })),
+  on(VillainActions.getVillainsSuccess, (state, { villains }) => ({
+    ...state,
+    loading: false,
+    villains
+  })),
+  on(VillainActions.deleteVillain, (state, { villain }) => ({
+    ...state,
+    loading: false,
+    villains: state.villains.filter(v => v !== villain)
+  })),
+  on(VillainActions.deleteVillainSuccess, state => ({
+    ...state,
+    loading: false
+  })),
+  on(VillainActions.deleteVillainError, (state, { error }) => ({
+    ...state,
+    villains: [...state.villains, error.requestData],
+    loading: false
+  })),
+  on(VillainActions.updateVillain, (state, { villain }) => ({
+    ...state,
+    villains: state.villains.map(v => {
+      if (v.id === villain.id) {
+        state.loading = true;
+      }
+      return v;
+    })
+  })),
+  on(VillainActions.updateVillainSuccess, (state, { villain }) =>
+    modifyVillainState(state, villain)
+  ),
+  on(VillainActions.updateVillainError, (state, { error }) => ({
+    ...state,
+    villains: state.villains.map(v => {
+      if (v.id === error.requestData.id) {
+        // Huh? No idea what the error is!
+        state.error = true;
+      }
+      return v;
+    }),
+    loading: false
+  }))
+);
+
+export function reducer(state: VillainState | undefined, action: Action) {
+  return villainReducer(state, action);
 }

@@ -1,70 +1,61 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { concatMap, switchMap } from 'rxjs/operators';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import * as HeroActions from '../actions';
 import { HeroDataService } from '../services';
-import { EntityState } from '../reducers';
-
-const filterAction = new HeroActions.GetHeroes();
-const toAction = HeroActions.toAction();
-type HeroAction = HeroActions.HeroAction;
 
 @Injectable()
 export class HeroEffects {
-  @Effect()
-  // this.actions.pipe(
-  //   ofType(AuthenticationActionTypes.LOGIN)
-  getHeroes$: Observable<Action> = this.actions$.pipe(
-    ofType(HeroActions.GET_HEROES),
-    switchMap(() =>
-      toAction(
-        this.heroDataService.getHeroes(),
-        HeroActions.GetHeroesSuccess,
-        HeroActions.GetHeroesError
+  getHeroes$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HeroActions.getHeroes),
+      switchMap(() =>
+        this.heroDataService.getHeroes().pipe(
+          map(heroes => HeroActions.getHeroesSuccess({ heroes })),
+          catchError(error => of(HeroActions.getHeroesError({ error })))
+        )
       )
     )
   );
 
-  @Effect()
-  addHero$: Observable<Action> = this.actions$.pipe(
-    ofType(HeroActions.ADD_HERO),
-    concatMap((action: HeroAction) =>
-      toAction(
-        this.heroDataService.addHero(action.payload),
-        HeroActions.AddHeroSuccess,
-        HeroActions.AddHeroError
+  addHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HeroActions.addHero),
+      concatMap(action =>
+        this.heroDataService.addHero(action.hero).pipe(
+          map(hero => HeroActions.addHeroSuccess({ hero })),
+          catchError(error => of(HeroActions.addHeroError({ error })))
+        )
       )
     )
   );
 
-  @Effect()
-  deleteHero$: Observable<Action> = this.actions$.pipe(
-    ofType(HeroActions.DELETE_HERO),
-    concatMap((action: HeroAction) =>
-      toAction(
-        this.heroDataService.deleteHero(action.payload),
-        HeroActions.DeleteHeroSuccess,
-        HeroActions.DeleteHeroError
+  deleteHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HeroActions.deleteHero),
+      concatMap(action =>
+        this.heroDataService.deleteHero(action.hero).pipe(
+          map(hero => HeroActions.deleteHeroSuccess({ hero })),
+          catchError(error => of(HeroActions.deleteHeroError({ error })))
+        )
       )
     )
   );
 
-  @Effect()
-  updateHero$: Observable<Action> = this.actions$.pipe(
-    ofType<HeroActions.UpdateHero>(HeroActions.UPDATE_HERO),
-    concatMap((action: HeroAction) =>
-      toAction(
-        this.heroDataService.updateHero(action.payload),
-        HeroActions.UpdateHeroSuccess,
-        HeroActions.UpdateHeroError
+  updateHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HeroActions.updateHero),
+      concatMap(action =>
+        this.heroDataService.updateHero(action.hero).pipe(
+          map(hero => HeroActions.updateHeroSuccess({ hero })),
+          catchError(error => of(HeroActions.updateHeroError({ error })))
+        )
       )
     )
   );
 
   constructor(
-    private store: Store<EntityState>,
     private actions$: Actions,
     private heroDataService: HeroDataService
   ) {}
